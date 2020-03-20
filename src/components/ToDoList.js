@@ -1,35 +1,16 @@
-import React from 'react';
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
 import ToDo from './ToDo'
 
-const ToDoList = ({ tasks, match, onToggleCompleted }) => {
-    let filteredTasks
-    switch (match.params.filter) {
-        case 'completed':
-            filteredTasks = tasks.filter(task => task.completed)
-            break;
-    
-        default:
-            filteredTasks = tasks
-            break;
-    }
 
-    if (filteredTasks.length === 0) {
-        return (
-            <React.Fragment>
-                <h1 className="m-3">Liste de tâches</h1>
-    
-                <ul className="list-group m-3">
-                    <li className="list-group-item">Aucune tâche à afficher</li>
-                </ul>
-            </React.Fragment>
-        )
-    } else {
+class ToDoList extends Component {
+    render() {
         return (
             <React.Fragment>
                 <h1 className="m-3">Liste de tâches</h1>
                 <ul className="list-group m-3">
                     {
-                        filteredTasks.map((task) => <ToDo task={task} key={task.id} onToggleCompleted={onToggleCompleted}></ToDo>)
+                        this.props.tasks.map((task) => <ToDo task={task} key={task.id}></ToDo>)
                     }
                 </ul>
             </React.Fragment>
@@ -37,4 +18,10 @@ const ToDoList = ({ tasks, match, onToggleCompleted }) => {
     }
 }
 
-export default ToDoList
+const mapStateToProps = (state) => {
+    return {
+            tasks: state.tasks
+    }
+}
+
+export default connect(mapStateToProps)(ToDoList)
